@@ -10,7 +10,6 @@ import uvicorn
 API_URL = "http://127.0.0.1:8000/predict/"
 
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
 
 picam2 = Picamera2()
 picam2.configure(picam2.create_preview_configuration(main={"size": (640, 480)}))
@@ -62,10 +61,6 @@ def generate_frames():
 
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-
-@app.get("/", response_class=HTMLResponse)
-def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/video_feed")
 def video_feed():

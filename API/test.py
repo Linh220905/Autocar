@@ -1,7 +1,7 @@
 import requests
 import cv2
 
-API_URL = "http://127.0.0.1:8000/predict/"
+API_URL = "http://192.168.43.77:8000/predict/"
 VIDEO_PATH = "../Data/left_lane_low.mp4"
 
 cap = cv2.VideoCapture(VIDEO_PATH)
@@ -16,9 +16,7 @@ while True:
         break
 
     frame_height, frame_width = frame.shape[:2]
-
     resized = cv2.resize(frame, (640, 480))
-
     _, img_encoded = cv2.imencode('.jpg', resized)
     try:
         response = requests.post(
