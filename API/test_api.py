@@ -3,7 +3,8 @@ import httpx
 import asyncio
 import time
 
-API_URL = "http://localhost:8000/predict/"
+API_URL = "http://100.64.0.4:8000/predict/"
+# API_URL = "http://localhost:8000/predict/"
 VIDEO_PATH = "../Data/left_lane_low.mp4"
 
 async def main():
@@ -73,6 +74,7 @@ async def main():
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
 
             cv2.imshow("YOLO Lane Detection (httpx async)", frame)
+            print(f"FPS: {fps:.2f}, Infer time: {infer_time:.2f}")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 

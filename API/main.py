@@ -11,7 +11,6 @@ import uvicorn
 app = FastAPI()
 
 model = YOLO("../models/detect_lane_retrain.pt", verbose=False)
-model.to('cpu')
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-offset_buffer = deque(maxlen=5)
+offset_buffer = deque(maxlen=3)
 
 @app.get("/")
 def index():
@@ -30,26 +29,26 @@ def index():
 @app.post("/predict/")
 async def predict_lane(file: UploadFile = File(...)):
     contents = await file.read()
-    image = Image.open(io.BytesIO(contents)).convert("RGB").resize((640, 480))
+    image = Image.open(io.BytesIO(contents)).convert("RGB")
     frame = np.array(image)
     frame_height, frame_width = frame.shape[:2]
     center_frame = frame_width / 2
 
-    results = model.predict(frame, conf=0.7, device='cpu')
+    results = model.predict(frame, conf=0.7)
+
     lane_centers = []
+    masks = results[0].masks.data if results[0].masks is not None else []
 
-    if results[0].masks is not None:
-        masks = results[0].masks.data
-        for mask in masks:
-            ys, xs = torch.where(mask > 0.5)
-            if ys.numel() == 0 or xs.numel() == 0:
-                continue
+    for mask in masks:
+        ys, xs = torch.where(mask > 0.5)
+        if ys.numel() == 0 or xs.numel() == 0:
+            continue
 
-            cx = torch.mean(xs.float()).item()
-            cy = torch.mean(ys.float()).item()
+        cx = np.mean(xs.cpu().numpy())
+        cy = np.mean(ys.cpu().numpy())
 
-            if cy > frame_height * 0.3:
-                lane_centers.append((cx, cy))
+        if cy > frame_height * 0.3:
+            lane_centers.append((cx, cy))
 
     if not lane_centers:
         return {"offset": None, "direction": "NO LANE", "centers": []}
