@@ -23,13 +23,13 @@ async def main():
     infer_time = -1
 
     async with websockets.connect(WS_URL) as ws:
+        i = 0
         while True:
             ret, frame = cap.read()
             if not ret:
                 break
 
-            resized = cv2.resize(frame, (640, 480))
-            _, img_encoded = cv2.imencode('.jpg', resized, [int(cv2.IMWRITE_JPEG_QUALITY), 60])
+            _, img_encoded = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), 60])
             img_bytes = img_encoded.tobytes()
 
             start_time = time.time()
@@ -48,6 +48,8 @@ async def main():
                     cv2.putText(frame, f"Offset: {offset:.1f}", (10, 30),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
                 else:
+                    cv2.imwrite(f"Frames/Frame_no_lane_{i}.png", frame)
+                    i+=1
                     cv2.putText(frame, "No lane detected", (10, 30),
                                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
