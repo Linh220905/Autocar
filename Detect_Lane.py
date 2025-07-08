@@ -30,19 +30,19 @@ def detect_lane(image_path, result_path,black_gray,red_gray):
     lower_black1 = np.array([0, 0, 0])
     upper_black1 = np.array([180, 255, 50])  
 
-    lower_black2 = np.array([10//2,15*2.55,2*2.55])
-    upper_black2 = np.array([50//2,45*2.55,25*2.55])
+    # lower_black2 = np.array([10//2,15*2.55,2*2.55])
+    # upper_black2 = np.array([50//2,45*2.55,25*2.55])
 
-    lower_black3 = np.array([20//2,10*2.55,20*2.55])
-    upper_black3 = np.array([40//2,30*2.55,30*2.55])
+    # lower_black3 = np.array([20//2,10*2.55,20*2.55])
+    # upper_black3 = np.array([40//2,30*2.55,30*2.55])
 
-    lower_black4 = np.array([20//2,45*2.55,10*2.55])
-    upper_black4 = np.array([40//2,60*2.55,30*2.55])
+    # lower_black4 = np.array([20//2,45*2.55,10*2.55])
+    # upper_black4 = np.array([40//2,60*2.55,30*2.55])
 
     mask_black1 = cv2.inRange(hsv_black, lower_black1,upper_black1)
-    mask_black2 = cv2.inRange(hsv_black, lower_black2,upper_black2)
-    mask_black3 = cv2.inRange(hsv_black, lower_black3,upper_black3)
-    mask_black4 = cv2.inRange(hsv_black, lower_black4,upper_black4)
+    # mask_black2 = cv2.inRange(hsv_black, lower_black2,upper_black2)
+    # mask_black3 = cv2.inRange(hsv_black, lower_black3,upper_black3)
+    # mask_black4 = cv2.inRange(hsv_black, lower_black4,upper_black4)
     mask_black = mask_black1
 
 
@@ -51,15 +51,15 @@ def detect_lane(image_path, result_path,black_gray,red_gray):
     upper_red1 = np.array([10//2, 105*2.55,50 *2.55])
     lower_red2 = np.array([340//2, 45*2.55, 18*2.55])
     upper_red2 = np.array([360//2, 100*2.55, 55*2.55])
-    lower_red3 = np.array([347//2, 68*2.55 , 50*2.55])
-    upper_red3 = np.array([360*2.55,100*2.55, 75*2.55])
-    lower_red4 = np.array([0//2, 68*2.55 , 10*2.55])
-    upper_red4 = np.array([10*2.55,100*2.55, 30*2.55])
+    # lower_red3 = np.array([347//2, 68*2.55 , 50*2.55])
+    # upper_red3 = np.array([360*2.55,100*2.55, 75*2.55])
+    # lower_red4 = np.array([0//2, 68*2.55 , 10*2.55])
+    # upper_red4 = np.array([10*2.55,100*2.55, 30*2.55])
 
     mask_red1 = cv2.inRange(hsv_red, lower_red1, upper_red1)
     mask_red2 = cv2.inRange(hsv_red, lower_red2, upper_red2)
-    mask_red3 = cv2.inRange(hsv_red, lower_red3, upper_red3)
-    mask_red4 = cv2.inRange(hsv_red, lower_red4, upper_red4)
+    # mask_red3 = cv2.inRange(hsv_red, lower_red3, upper_red3)
+    # mask_red4 = cv2.inRange(hsv_red, lower_red4, upper_red4)
     mask_red = mask_red1  | mask_red2 
    
     mask_red = cv2.erode(mask_red, None, iterations=1)
@@ -69,7 +69,7 @@ def detect_lane(image_path, result_path,black_gray,red_gray):
 
     mask_black = cv2.erode(mask_black, None, iterations=1)
     mask_black = cv2.dilate(mask_black, None, iterations=1)
-    #mask_red = extract_color_mask_kmeans(hsv_red, target_hue_range=(170, 180))  # tương ứng 340° – 360° trong HSV
+    
 
 
     
